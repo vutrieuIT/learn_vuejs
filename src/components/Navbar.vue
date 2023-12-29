@@ -3,14 +3,15 @@
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Navbar</a>
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item" v-for="(page, index) in pages" :key="index">
-          <NavbarLink
-            :page="page"
-            :isActive="activePage === index"
-            @click.prevent="navLinkClick(index)"
-          >
-          </NavbarLink>
-        </li>
+        <NavbarLink
+          v-for="(page, index) in publishedPages"
+          :key="index"
+          :page="page"
+          :index="index"
+          :isActive="activePage === index"
+          @actived="$emit('actived')"
+        >
+        </NavbarLink>
       </ul>
       <form action="" class="d-flex">
         <button class="btn btn-primary" v-on:click.prevent="changeTheme">
@@ -33,8 +34,13 @@ export default {
       theme: "dark",
     };
   },
-  created(){
+  created() {
     this.getThemeSetting();
+  },
+  computed: {
+    publishedPages() {
+      return this.pages.filter((p) => p.published);
+    },
   },
   methods: {
     changeTheme() {

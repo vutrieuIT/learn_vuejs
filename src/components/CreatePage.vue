@@ -3,11 +3,11 @@
     <div class="row">
       <div class="col-md-8">
         <div class="mb-3">
-          <label for="" class="form-label"> Page Title </label>
+          <label class="form-label" name=""> Page Title </label>
           <input type="text" class="form-control" v-model="pageTitle" />
         </div>
         <div class="mb-3">
-          <label for="" class="form-label"> Context </label>
+          <label class="form-label" name=""> Context </label>
           <textarea
             type="text"
             rows="5"
@@ -19,17 +19,24 @@
 
       <div class="col">
         <div class="mb-3">
-          <label for="" class="form-label"> Link Text </label>
+          <label class="form-label" name=""> Link Text </label>
           <input type="text" class="form-control" v-model="linkText" />
         </div>
         <div class="mb-3">
-          <label for="" class="form-label"> Link URL </label>
+          <label class="form-label" name=""> Link URL </label>
           <input type="text" class="form-control" v-model="linkUrl" />
         </div>
         <div class="row mb-3">
           <div class="form-check">
-            <input type="checkbox" class="form-check-inout" />
-            <label for="gridCheck1" class="form-check-label"> Published </label>
+            <input
+              id="gridCheck1"
+              type="checkbox"
+              class="form-check-inout"
+              v-model="published"
+            />
+            <label for="gridCheck1" class="form-check-label" name="">
+              Published
+            </label>
           </div>
         </div>
       </div>
@@ -50,13 +57,21 @@
 
 <script>
 export default {
-  props: ["pageCreated"],
+  emits:{
+    pageCreated({pageTitle, content, link}) {
+      if(!pageTitle) return false;
+      if(!content) return false;
+      if(!link || !link.text || !link.url) return false;
+      return true;
+    }
+  },
   data() {
     return {
       pageTitle: "",
       content: "",
       linkText: "",
       linkUrl: "",
+      published: true,
     };
   },
   computed: {
@@ -73,14 +88,28 @@ export default {
         return;
       }
 
-      this.pageCreated({
+      this.$emit("pageCreated", {
         pageTitle: this.pageTitle,
         content: this.content,
         link: {
-          linkText: this.linkText,
-          linkUrl: this.linkUrl,
+          text: this.linkText,
+          url: this.linkUrl,
         },
+        published: this.published,
       });
+
+      this.pageTitle = "";
+      this.content = "";
+      this.linkText = "";
+      this.linkUrl = "";
+      this.published = true;
+    },
+  },
+  watch: {
+    pageTitle(newTitle, oldTitle) {
+      if (this.linkText === oldTitle) {
+        this.linkText = newTitle;
+      }
     },
   },
 };
