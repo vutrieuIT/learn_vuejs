@@ -4,8 +4,9 @@
     :active-page="activePage"
   >
   </Navbar>
-  <PageContent v-if="pages.length > 0" :page="pages[activePage]"></PageContent>
-  <CreatePage @pageCreated="pageCreated"></CreatePage>
+  <RouterView></RouterView>
+  <!-- <PageContent v-if="pages.length > 0" :page="pages[activePage]"></PageContent>
+  <CreatePage @pageCreated="pageCreated"></CreatePage> -->
 </template>
 
 <script>

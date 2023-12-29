@@ -1,9 +1,12 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import "../node_modules/bootstrap/dist/css/bootstrap.css";
-import $bus from "@/utils/Event"
+import $bus from "@/utils/Event";
+import router from "./routes";
 
 const app = createApp(App);
+
+app.use(router);
 
 app.config.globalProperties.$bus = $bus;
 
